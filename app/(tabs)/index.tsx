@@ -1,31 +1,108 @@
-import { StyleSheet } from 'react-native';
+import { useNavigation } from "expo-router";
+import { useEffect } from "react";
+import { View, Text, StyleSheet, Dimensions, Image, Pressable } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
+  Easing,
+} from "react-native-reanimated";
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+export default function Home() {
+  const navigation = useNavigation();
 
-export default function TabOneScreen() {
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
+
+  const { height } = Dimensions.get("window");
+
+  // Valores animados para transição vertical (subir do fundo)
+  const translateY1 = useSharedValue(height); // começa fora da tela
+  const translateY2 = useSharedValue(height); // idem
+
+  // Animação de entrada ao montar a tela
+  useEffect(() => {
+    translateY1.value = withDelay(
+      300,
+      withTiming(0, {
+        duration: 1200,
+        easing: Easing.out(Easing.exp),
+      })
+    );
+
+    translateY2.value = withDelay(
+      600,
+      withTiming(0, {
+        duration: 1200,
+        easing: Easing.out(Easing.exp),
+      })
+    );
+  }, []);
+
+  // Estilos animados
+  const circle1Style = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY1.value }],
+    };
+  });
+
+  const circle2Style = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY2.value }],
+    };
+  });
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <Image
+        style={styles.imgLogo}
+        source={require("../../assets/images/logo.png")}
+      />
+      <Pressable onPress={alert}>
+        <Text>I'm pressable!</Text>
+      </Pressable>
+      <Animated.View style={[styles.yellowCircle, circle1Style]} />
+      <Animated.View style={[styles.yellowCircle2, circle2Style]} />
     </View>
   );
 }
 
+const { width, height } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  imgLogo: {
+    width: 150,
+    height: 150,
+    marginBottom: 5,
+    position: "absolute",
+    top: height / 4,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  yellowCircle: {
+    position: "absolute",
+    width: 250,
+    height: 250,
+    borderRadius: 150,
+    backgroundColor: "gold",
+    bottom: height / 5 - 250,
+    left: width / 1.5,
+    opacity: 1,
+  },
+  yellowCircle2: {
+    position: "absolute",
+    width: 500,
+    height: 500,
+    borderRadius: 300,
+    backgroundColor: "gold",
+    bottom: height / 5 - 400,
+    left: width / 2.5,
+    opacity: 0.5,
   },
 });
