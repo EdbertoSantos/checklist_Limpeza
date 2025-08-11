@@ -1,6 +1,13 @@
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions, Image, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  Pressable,
+} from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -56,12 +63,13 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
+      <Text style={{ fontSize: 25, fontFamily: "Poppins" }}>Seja bem vindo</Text>
       <Image
         style={styles.imgLogo}
-        source={require("../../assets/images/logo.png")}
+        source={require("../assets/images/logo.png")}
       />
-      <Pressable onPress={alert}>
-        <Text>I'm pressable!</Text>
+      <Pressable style={styles.btnLogin} onPress={() => router.replace("/login")} >
+        <Text style={{ fontSize: 25, fontFamily: "Poppins" }}>ENTRAR</Text>
       </Pressable>
       <Animated.View style={[styles.yellowCircle, circle1Style]} />
       <Animated.View style={[styles.yellowCircle2, circle2Style]} />
@@ -104,5 +112,13 @@ const styles = StyleSheet.create({
     bottom: height / 5 - 400,
     left: width / 2.5,
     opacity: 0.5,
+  },
+  btnLogin: {
+    backgroundColor: "gold",
+    width: 250,
+    height: 35,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

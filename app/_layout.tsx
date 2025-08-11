@@ -9,6 +9,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Poppins: require("../assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
   });
 
   useEffect(() => {
@@ -32,6 +33,9 @@ function RootLayoutNav() {
       <StatusBar style="dark" />
       <Stack>
         <Stack.Screen name="index" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="menu" />
+        <Stack.Screen name="scan" />
       </Stack>
     </>
   );
